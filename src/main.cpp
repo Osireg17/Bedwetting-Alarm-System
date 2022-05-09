@@ -17,8 +17,25 @@ void setup() {
 };
 
 void loop() {
-  buzzer();
-  LED(); //this will cause an LED to blink as well as make a buzzer sound every 500 seconds
+  raw = analogRead(analogPin);
+  if(raw){
+    buffer = raw * Vin;
+    Vout = (buffer)/1024.0;
+    buffer = (Vin/Vout) - 1;
+    R2 = R1 * buffer;
+  };
+
+  Serial.print("Vout: ");
+  Serial.println(Vout);
+  Serial.print("R2: ");
+  Serial.println(R2);
+
+  if(R2 <= 30){
+    LED();
+  } else if(R2 < 20){
+    buzzer();
+    LED();
+  }; //this will cause an LED to blink as well as make a buzzer sound every 500 seconds
 };
 
 void buzzer(){
@@ -35,16 +52,16 @@ void LED(){
   delay(500);
 };
 
-void Resistance(){
-  raw = analogRead(analogPin);
-  if(raw){
-    buffer = raw * Vin;
-    Vout = (buffer)/1024.0;
-    buffer = (Vin/Vout) - 1;
-    R2 = R1 * buffer;
-    Serial.print("Vout: ");
-    Serial.println(Vout);
-    Serial.print("R2: ");
-    Serial.println(R2);
-    delay(1000);
-};
+// void Resistance(){
+//   raw = analogRead(analogPin);
+//   if(raw){
+//     buffer = raw * Vin;
+//     Vout = (buffer)/1024.0;
+//     buffer = (Vin/Vout) - 1;
+//     R2 = R1 * buffer;
+//     Serial.print("Vout: ");
+//     Serial.println(Vout);
+//     Serial.print("R2: ");
+//     Serial.println(R2);
+//     delay(1000);
+// };
